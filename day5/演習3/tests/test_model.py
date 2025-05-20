@@ -132,7 +132,7 @@ def test_model_accuracy(train_model_fn, sample_data, preprocessor):
     difference = accuracy_2 - accuracy_1
     # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
     assert accuracy_2 >= 0.75, f"モデルの精度が低すぎます: {accuracy_2}"
-    assert difference >= 0, f"前回よりも精度が悪化しています: {difference.3f}"
+    assert difference >= 0, f"前回よりも精度が悪化しています: {difference:.3f}"
 
 
 def test_model_inference_time(train_model):
