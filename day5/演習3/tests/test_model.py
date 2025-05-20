@@ -121,13 +121,15 @@ def test_model_exists():
 #    assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
 
 
-def test_model_accuracy(train_model_fn, sample_data, preprocessor):
+def test_model_accuracy():
+    sample_data_obj = sample_data()
+    preprocessor_obj = preprocessor()
     """モデルの精度を検証"""
-    model_1, X_test_1, y_test_1 = train_model_fn(sample_data, preprocessor)
+    model_1, X_test_1, y_test_1 = train_model(sample_data_obj, preprocessor_obj)
     y_pred_1 = model_1.predict(X_test_1)
     accuracy_1 = accuracy_score(y_test_1, y_pred_1)
     """モデルの精度を再検証"""
-    model_2, X_test_2, y_test_2 = train_model_fn(sample_data, preprocessor)
+    model_2, X_test_2, y_test_2 = train_model(sample_data_obj, preprocessor_obj)
     y_pred_2 = model_2.predict(X_test_2)
     accuracy_2 = accuracy_score(y_test_2, y_pred_2)
     difference = accuracy_2 - accuracy_1
