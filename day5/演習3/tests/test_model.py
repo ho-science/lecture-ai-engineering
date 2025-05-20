@@ -109,31 +109,25 @@ def test_model_exists():
     assert os.path.exists(MODEL_PATH), "モデルファイルが存在しません"
 
 
-# def test_model_accuracy(train_model):
-#    """モデルの精度を検証"""
-#    model, X_test, y_test = train_model
-
-# 予測と精度計算
-#    y_pred = model.predict(X_test)
-#    accuracy = accuracy_score(y_test, y_pred)
-
-# Titanicデータセットでは0.75以上の精度が一般的に良いとされる
-#    assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
-
-
-def test_model_accuracy(sample_data, preprocessor):
+def test_model_accuracy(train_model):
     """モデルの精度を検証"""
-    model_1, X_test_1, y_test_1 = train_model(sample_data, preprocessor)
-    y_pred_1 = model_1.predict(X_test_1)
-    accuracy_1 = accuracy_score(y_test_1, y_pred_1)
-    """モデルの精度を再検証"""
-    model_2, X_test_2, y_test_2 = train_model(sample_data, preprocessor)
-    y_pred_2 = model_2.predict(X_test_2)
-    accuracy_2 = accuracy_score(y_test_2, y_pred_2)
-    difference = accuracy_2 - accuracy_1
+    model, X_test, y_test = train_model
+
+    # 予測と精度計算
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
     # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
-    assert accuracy_2 >= 0.75, f"モデルの精度が低すぎます: {accuracy_2}"
-    assert difference >= 0, f"前回よりも精度が悪化しています: {difference:.3f}"
+    assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
+
+    # 前回の精度との比較及び今回の精度の保存
+    if os.path.exists("last_accuracy.pkl"):
+        with open("last_accuracy.pkl", "rb") as f:
+            last_accuracy = pickle.load(f)
+            difference = accuracy - last_accuracy
+        assert difference >= 0, f"前回よりも精度が悪化しています：{difference:.3f}"
+    with open("last_accuracy.pkl", "wb") as f:
+        pickle.dump(accuracy, f)
 
 
 def test_model_inference_time(train_model):
