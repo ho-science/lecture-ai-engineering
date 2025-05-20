@@ -120,6 +120,15 @@ def test_model_accuracy(train_model):
     # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
     assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
 
+    # 前回の精度との比較及び今回の精度の保存
+    if os.path.exists("last_accuracy.pkl"):
+        with open("last_accuracy.pkl", "rb") as f:
+            last_accuracy = pickle.load(f)
+            difference = accuracy - last_accuracy
+        assert difference >= 0, f"前回よりも精度が悪化しています：{difference:.3f}"
+    with open("last_accuracy.pkl", "wb") as f:
+        pickle.dump(accuracy, f)
+
 
 def test_model_inference_time(train_model):
     """モデルの推論時間を検証"""
